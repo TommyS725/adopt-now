@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post{
+model post{
   postId String @id @unique
   provider String?
   text String
