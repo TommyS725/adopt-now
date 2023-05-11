@@ -1,0 +1,5 @@
+# cookies for scarping
+cookies/*
+
+# enviornment variables
+.env
