@@ -3,6 +3,9 @@ import { Inter } from 'next/font/google'
 import {cn}from "@/lib/utils"
 import { ToggleTheme } from '@/components/ui/theme-toogle'
 import Providers from '@/components/Providers'
+import Link from 'next/link'
+
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,12 +19,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
   return (
     <html lang="en">
-      <body className={cn("px-20  min-h-screen bg-zinc-300 dark:bg-zinc-900	",inter.className)}>
+      <body className={cn("  min-h-screen 	",inter.className)}>
           <Providers>
-            <div className='flex py-[2rem]'>
-              <h1 className=' text-5xl font-bold grow'>Adopt Now!</h1>
+            <div className='flex py-[1rem] bg-blue-700 dark:bg-blue-950 px-10 bg-opacity-40 dark:bg-opacity-20 sticky top-0 z-10 backdrop-blur-xl'>
+              <Link href="/" className=' text-3xl  grow'>Adopt Now!</Link>
               <ToggleTheme/>
             </div>
             {children}

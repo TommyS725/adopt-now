@@ -21,7 +21,7 @@ export function SlideShow(){
         autoPlay={true} interval={2000} 
         showArrows={false} showStatus={false}>
                     {images.map((image,index)=>
-                            <img className=" rounded-md drop-shadow-xl" src={path+image}/>
+                            <img key = {index} className=" rounded-md drop-shadow-xl" src={path+image}/>
                     )}
         </Carousel>
         </>
