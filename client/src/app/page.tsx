@@ -1,6 +1,6 @@
-import { SlideShow } from '@/components/SlideShow'
 import axios from 'axios'
 import { ScrollTop } from '@/components/ui/BackToTop'
+import {HeaderSlide} from '@/components/Swiper'
 
 export default async function Home() {
 
@@ -26,8 +26,9 @@ export default async function Home() {
   return (
     <>
       <main className="flex min-h-screen flex-col items-center  w-full h-full px-2 py-4">
-        <div className="w-1/2 py-4">
-          <SlideShow/>
+        
+        <div className="w-full py-4">
+          <HeaderSlide/>
         </div>
         <h1>Save lifessssss!</h1>
       </main>
