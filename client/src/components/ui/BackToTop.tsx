@@ -1,13 +1,16 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState,FC} from "react"
 import { Button } from "./button"
 import { ChevronUpIcon } from "lucide-react" 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 
-export function ScrollTop(){
-    if(typeof window == "undefined"){
-        return null
-    }
+export const ScrollTop:FC = () =>{
 
     const [visible,setVisisble] = useState<boolean>(false)
 
@@ -22,9 +25,9 @@ export function ScrollTop(){
     }
 
     useEffect(()=>{
-        window.addEventListener("scroll",scrollListener);
+        window?.addEventListener("scroll",scrollListener);
         return () =>
-           window.removeEventListener("scroll", scrollListener);
+           window?.removeEventListener("scroll", scrollListener);
     },[])
 
     const handleClick = () =>{
@@ -35,12 +38,25 @@ export function ScrollTop(){
           })
     }
 
+    if(typeof window == "undefined"){
+        return null
+    }
+
     return(
         <>
         {visible?
-              <Button onClick={handleClick} variant="outline" className=' fixed bottom-6 left-4 w-12 h-12 rounded-full p-0 border-2 dark:border-4'>
-                <ChevronUpIcon/>
-              </Button>
+            <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                <Button onClick={handleClick} variant="outline" className=' fixed bottom-6 left-4 w-12 h-12 rounded-full p-0 border-2 dark:border-4'>
+                    <ChevronUpIcon/>
+                </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                <p>Back to top</p>
+                </TooltipContent>
+            </Tooltip>
+            </TooltipProvider>
               :null
             }  
         </>

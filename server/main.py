@@ -5,6 +5,8 @@ import os
 import psycopg2
 import datetime
 from facebook_scraper import get_posts
+from configparser import ConfigParser
+import time
 
 
 # access .env
@@ -15,7 +17,18 @@ now = datetime.datetime.now()
 
 cookies = os.listdir("./cookies")
 
-print(cookies)
+config = ConfigParser()
+config.read('config.ini')
+config_data = config['SERVER']
+
+if not config_data :
+    raise Exception('Confignot found')
+
+if not env_file :
+    raise Exception('Env file not found')
+
+if not cookies :
+    raise Exception('Cookies not found')
 
 app = FastAPI()
 
@@ -27,7 +40,7 @@ app.add_middleware(
 )
 
 def updatable()->bool:
-    update_interval = 1 #per day
+    update_interval = int(config_data['update_interval'])
     now = datetime.datetime.now()
     last = os.getenv("LAST_UPDATE")
     if last:
@@ -35,6 +48,15 @@ def updatable()->bool:
         return now - datetime.datetime.strptime(last, '%Y-%m-%d %H:%M:%S') > delta
     return True
 
+def wordCheck(text):
+    keywords = config_data['keywords'].split(',')
+    stopWords = config_data['stopwords'].split((','))
+    return  any(word in text for word in keywords) and all(word not in text for word in stopWords)
+
+def timeCheck(time:datetime):
+    now = datetime.datetime.now()
+    delta = int(config_data['max_delta_year'])
+    return time.year - now.year <= delta
 
 @app.get("/")
 def home():
@@ -82,7 +104,6 @@ def update():
     # Write changes to .env file.
     set_key(env_file, "LAST_UPDATE", os.environ["LAST_UPDATE"])
     
-    page_default = 5 #>=3
     insertSatement = """
     --sql
     INSERT INTO post (post_id,provider_id,text,images,date) VALUES
@@ -90,27 +111,28 @@ def update():
     SET text = EXCLUDED.text, images = EXCLUDED.images, date = EXCLUDED.date
     ;
     """
-
-    # for words that shd be inclued and words that shd prevent the insert
-    keywords = ["尋家","待領養"]
-    stopWords = ["暫停","暫不"]
-    
-    conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"))
-    cur = conn.cursor()
+    # convert the time back to standard time 
+    timezone = time.timezone
     
     try:
+        conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"))
+        cur = conn.cursor()
         # find all provider
         cur.execute("""--sql 
-        select provider_id, name from provider;""")
+        select provider_id, provider_name from provider;""")
         providers = cur.fetchall()
         
         index = 0 #which cookies to use 
+        page_limit = int(config_data['page_default'])
         for id,name in providers:
             print(f"Start scarping {name} using {cookies[index]}")
-            for post in get_posts(id, pages=page_default, cookies = "./cookies/"+cookies[index]):
-                if all(word not in post["text"] for word in keywords) or any(word in post["text"] for word in stopWords):
+            for post in get_posts(id, pages=page_limit, cookies = "./cookies/"+cookies[index]):
+                #standardize time zone
+                stamp = datetime.datetime.timestamp(post['time'])
+                standardizedTime = datetime.datetime.fromtimestamp(stamp + timezone)
+                if not standardizedTime or not timeCheck(standardizedTime) or not wordCheck(post['text']) :
                     continue
-                cur.execute(insertSatement,(post["post_id"],id,post["text"],post["images"],post["time"]))
+                cur.execute(insertSatement,(post["post_id"],id,post["text"],post["images"],standardizedTime))
             print(f"Finish scarping {name}")
             index = (index+1) %len(cookies)
     except BaseException as error:
@@ -123,5 +145,7 @@ def update():
 
 if __name__ == "__main__":
     import uvicorn
+    print("Reminder: Your cookies should be updated frequently")
     uvicorn.run(app, port=os.getenv("PORT",8000))
+    
 

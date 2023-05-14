@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,19 +8,20 @@ datasource db {
 }
 
 model post {
-  post_id     String  @id @unique
-  provider    provider @relation(fields: [provider_id], references: [provider_id],onDelete: Cascade)
+  post_id     String   @id @unique
   provider_id String
   text        String
-  images       String[] @default([])
+  images      String[] @default([])
   date        DateTime @default(now())
+  provider    provider @relation(fields: [provider_id], references: [provider_id], onDelete: Cascade)
 
   @@index([date])
   @@index([provider_id])
 }
 
 model provider {
-  provider_id String @id @unique
-  name        String
-  post        post[]
+  provider_name String
+  provider_id   String @id @unique
+  post          post[]
 }
+

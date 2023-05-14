@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { ScrollTop } from '@/components/ui/BackToTop'
 import {HeaderSlide} from '@/components/Swiper'
+import { MainSection } from '@/components/MainSection'
+import { Provider } from "@/type/dbInterfaces"
+import { prisma } from '@/components/db'
+
 
 export default async function Home() {
 
@@ -21,18 +25,19 @@ export default async function Home() {
   }
 
   //await handleConnect()
+  const providers:Provider[] = await prisma.provider.findMany()
 
   
   return (
     <>
       <main className="flex min-h-screen flex-col items-center  w-full h-full px-2 py-4">
-        
-        <div className="w-full py-4">
+        <div className=" py-4 w-full">
           <HeaderSlide/>
         </div>
-        <h1>Save lifessssss!</h1>
-      </main>
+        <h1 className='py-4'>Save lifessssss!</h1>
+        <MainSection providers={providers}/>
       <ScrollTop/>
+      </main>
     </>
   )
 }
