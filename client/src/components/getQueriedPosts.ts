@@ -39,6 +39,9 @@ export const getQuriedPosts = async (query:Query|undefined,page:number,postsPerP
     // @ts-expect-error
     const posts = await prisma.post.findMany(option)
         //console.log(skipping,postsPerPage)
+        // for(let post of posts){
+        //     console.log(post.text)
+        // }
         // @ts-expect-error
         return posts
     } catch (error) {

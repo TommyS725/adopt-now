@@ -26,7 +26,7 @@ export const ProvFilter:FC<ProvFilterProps>= ({providers,className="",handler}) 
   return (
     <Listbox value={checked} onChange={setChecked} multiple>
       <div className={cn("relative mt-1",className)}>
-        <Listbox.Button className="relative w-full cursor-default rounded-lg dark:bg-zinc-900 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+        <Listbox.Button className=" dark:hover:bg-slate-900 hover:bg-slate-100  relative w-full cursor-default rounded-lg border py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           {checked.length?
             <span className="block truncate">{checked.map((entry) => entry.provider_name).join(', ')}</span>:
             <span className="block truncate text-zinc-500">Select a provider</span>

@@ -14,6 +14,10 @@ module.exports = {
       screens: {
         "2xl": "1400px",
       },
+      lineClamp:{
+        10:'10',
+        12:'12',
+      }, 
     },
     extend: {
       colors: {
@@ -72,5 +76,10 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  variants:{
+    extends:{
+      lineClamp:['hover']
+    }, 
+  },
+  plugins: [require("tailwindcss-animate"),require('@tailwindcss/line-clamp'),],
 }

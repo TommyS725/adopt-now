@@ -3,7 +3,7 @@ export interface Post{
     post_id:String,
     provider_id:String,
     text:String,
-    images:String[],
+    images:string[],
     date:Date,
     provider:Provider
 }

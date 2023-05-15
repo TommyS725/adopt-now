@@ -135,6 +135,9 @@ def update():
                 cur.execute(insertSatement,(post["post_id"],id,post["text"],post["images"],standardizedTime))
             print(f"Finish scarping {name}")
             index = (index+1) %len(cookies)
+            conn.commit()
+            cur.close()
+            conn.close()
     except BaseException as error:
         print('An exception occurred: {}'.format(error))
     conn.commit()
