@@ -22,7 +22,7 @@ config.read('config.ini')
 config_data = config['SERVER']
 
 if not config_data :
-    raise Exception('Confignot found')
+    raise Exception('Config not found')
 
 if not env_file :
     raise Exception('Env file not found')
