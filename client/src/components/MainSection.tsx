@@ -81,6 +81,7 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
     useEffect(()=>{
         setPageNumber(1)
         //console.log(debouncedQuery)
+        setHasMore(true)
         let isCanceled:boolean = false
         const setQueriedPost = async ():Promise<void>=>{
             setPageNumber(1)
@@ -113,7 +114,8 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
             <div ref={SpinnerRef}>
                 <LoadingAnimation size={86}/>
             </div>
-        :<h1>No more content</h1>}
+        :null}
+        {hasMore?null:<h1>No more content</h1>}
    
     </>)
 }
