@@ -23,9 +23,14 @@ export default async function Home() {
       console.log("Connection error to backend server")
     }
   }
-
-  //await handleConnect()
-  const providers:Provider[] = await prisma.provider.findMany()
+  let providers:Provider[] = []
+  try {
+    await handleConnect()
+    providers = await prisma.provider.findMany()
+  } catch (error) {
+    console.log(error)
+  }
+  
 
   
   return (

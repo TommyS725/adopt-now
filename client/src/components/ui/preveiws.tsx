@@ -1,6 +1,6 @@
 'use client'
 
-import {FC, useEffect, useRef, useState} from 'react'
+import {FC} from 'react'
 import { Post } from '@/type/dbInterfaces'
 import parse,{HTMLReactParserOptions, Element} from 'html-react-parser';
 import { LinkConfirm } from './link-confirm';
