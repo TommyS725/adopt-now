@@ -48,7 +48,7 @@ export const ScrollTop:FC = () =>{
             <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                <Button onClick={handleClick} variant="outline" className=' fixed bottom-6 left-4 w-12 h-12 rounded-full p-0 border-2 dark:border-4'>
+                <Button onClick={handleClick} variant="outline" className='z-20 fixed bottom-6 left-4 w-12 h-12 rounded-full p-0 border-2 dark:border-4'>
                     <ChevronUpIcon/>
                 </Button>
                 </TooltipTrigger>

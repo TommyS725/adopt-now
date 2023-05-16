@@ -2,12 +2,14 @@
 
 import { FilterBar } from "./FilterBar"
 import { Provider } from "@/type/dbInterfaces"
-import {FC,useEffect,useState} from "react"
+import {FC,useEffect,useState, useRef} from "react"
 import Query from "@/type/query"
 import { useDebouncedValue } from "@mantine/hooks"
 import { getQuriedPosts } from "./getQueriedPosts"
 import { Post } from "@/type/dbInterfaces"
 import { PreviewCard } from "./ui/preveiws"
+import { LoadingAnimation } from "./ui/loadingAnimation"
+import { useInterval } from '@mantine/hooks';
 
 type SectionProps={
     providers:Provider[]
@@ -20,6 +22,41 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
     const [posts,setPosts] = useState<Post[]>([])
     const [pageNumber,setPageNumber] = useState<number>(1)
     const [hasMore,setHasMore] = useState<boolean>(false)
+    const [isLoading,setIsloading] = useState<boolean>(true)
+    const [spinnerVisible,setSpinnerVisible] = useState<boolean>(false)
+    const observerRef = useRef<IntersectionObserver|null>()
+    const SpinnerRef = useRef<any>()
+    const pageInterval = useInterval(()=>setPageNumber(prev=> prev+1),1000)
+    
+    useEffect(()=>{
+        //if spinner is not rendered or loading
+        if(!SpinnerRef.current ||isLoading ){
+            return
+        }
+        //observe the new spinner
+        observerRef.current = new IntersectionObserver((entries)=>{
+            setSpinnerVisible(entries[0].isIntersecting)
+        })
+        observerRef.current.observe(SpinnerRef.current)
+        //return observerRef.current.disconnect()
+    },[isLoading,hasMore])
+
+    useEffect(()=>{
+        console.log(spinnerVisible)
+        if(!hasMore&&pageInterval.active){
+            pageInterval.stop()
+            return
+        }
+        if(spinnerVisible &&!pageInterval.active){
+            pageInterval.start()
+            return
+        }
+        if(!spinnerVisible&&pageInterval.active){
+            pageInterval.stop()
+            return
+        }
+
+    },[spinnerVisible,hasMore])
 
     const postsPerPage:number = 3
 
@@ -28,7 +65,7 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
         let isCanceled:boolean = false
         const setQueriedPost = async ():Promise<void>=>{
             const data = await getQuriedPosts(debouncedQuery,pageNumber,postsPerPage)
-            if(!isCanceled){
+            if(!isCanceled||1==1){
                 //console.log(data.length)
                 setHasMore(data.length>0)
                 setPosts(prev=>[...prev,...data])
@@ -47,11 +84,13 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
         let isCanceled:boolean = false
         const setQueriedPost = async ():Promise<void>=>{
             setPageNumber(1)
+            setIsloading(true)
             const data = await getQuriedPosts(debouncedQuery,pageNumber,postsPerPage)
             if(!isCanceled){
                 setHasMore(data.length>0)
                 setPosts(data)
             }
+            setIsloading(false)
         }
         setQueriedPost()
         return ()=>{
@@ -65,17 +104,16 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
         {/* {posts.map((entry,index)=>{
             return <div key={index} className=" truncate w-2/3">{entry.provider.provider_name} {entry.text} <span>{`${entry.date.toLocaleString()}`}</span></div>
         })} */}
-        <div className="w-11/12 py-2 flex flex-wrap  justify-evenly">
-            {posts.length?posts.map((entry,index)=><PreviewCard post={entry} key={index}/>):null}
+        <div className="w-11/12 py-2 flex flex-wrap  justify-evenly gap-x-4 gap-y-10">
+            {isLoading? <LoadingAnimation size={86}/>: posts.length?posts.map((entry,index)=><PreviewCard post={entry} key={index}/>):null}
         </div>
-        
-        {hasMore?
-            <button onClick={()=>setPageNumber(prev=>{return prev+1})}>add page no.</button>:
-            <h1>No more Content</h1>
-        }
-        <div>page {pageNumber}</div>
-        
-        
-        
+    
+        {/* <div>page {pageNumber}</div> */}
+        {hasMore&&!isLoading?
+            <div ref={SpinnerRef}>
+                <LoadingAnimation size={86}/>
+            </div>
+        :<h1>No more content</h1>}
+   
     </>)
 }

@@ -1,10 +1,12 @@
+import { LoadingAnimation } from "@/components/ui/loadingAnimation"
+
 
 export default async function Home() {
   
     
     return (
       <>
-       <h1>loading</h1>
+       <LoadingAnimation size={100}/>
       </>
     )
   }

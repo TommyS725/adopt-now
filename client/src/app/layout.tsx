@@ -4,6 +4,7 @@ import {cn}from "@/lib/utils"
 import { ToggleTheme } from '@/components/ui/theme-toogle'
 import Providers from '@/components/Providers'
 import Link from 'next/link'
+import { Footer } from '@/components/footer'
 
 
 
@@ -30,6 +31,7 @@ export default function RootLayout({
               <ToggleTheme/>
             </div>
             {children}
+            <Footer/>
           </Providers>
       </body>
     </html>
