@@ -26,7 +26,7 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
     const [spinnerVisible,setSpinnerVisible] = useState<boolean>(false)
     const observerRef = useRef<IntersectionObserver|null>()
     const SpinnerRef = useRef<any>()
-    const pageInterval = useInterval(()=>setPageNumber(prev=> prev+1),1000)
+    const pageInterval = useInterval(()=>setPageNumber(prev=> prev+1),200)
     
     useEffect(()=>{
         //if spinner is not rendered or loading
