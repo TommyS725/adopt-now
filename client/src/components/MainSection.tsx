@@ -21,7 +21,7 @@ export const  MainSection:FC<SectionProps> = ({providers}) => {
     const [debouncedQuery] = useDebouncedValue<Query|undefined>(query,200)
     const [posts,setPosts] = useState<Post[]>([])
     const [pageNumber,setPageNumber] = useState<number>(1)
-    const [hasMore,setHasMore] = useState<boolean>(false)
+    const [hasMore,setHasMore] = useState<boolean>(true)
     const [isLoading,setIsloading] = useState<boolean>(true)
     const [spinnerVisible,setSpinnerVisible] = useState<boolean>(false)
     const observerRef = useRef<IntersectionObserver|null>()
