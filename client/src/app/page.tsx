@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ScrollTop } from '@/components/ui/BackToTop'
 import {HeaderSlide} from '@/components/Swiper'
-import { MainSection } from '@/components/MainSection'
+import { MainSection } from "@/components/MainSection"
 import { Provider } from "@/type/dbInterfaces"
 import { prisma } from '@/components/db'
 
