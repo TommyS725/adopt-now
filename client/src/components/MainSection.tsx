@@ -14,7 +14,7 @@ type SectionProps={
     providers:Provider[]
 }
 
-const postsPerPage:number = 3
+const postsPerPage:number = 6
 
 
 export const  MainSection:FC<SectionProps> = ({providers}) => {
