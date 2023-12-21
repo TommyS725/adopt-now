@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={cn("  min-h-screen 	",inter.className)}>
           <Providers>
             <div className='flex py-[1rem] bg-blue-700 dark:bg-blue-950 px-10 bg-opacity-40 dark:bg-opacity-20 sticky top-0 z-10 backdrop-blur-xl'>
-              <Link href="/" className=' text-3xl  grow'>Adopt Now!</Link>
+              <Link href="/" className=' text-3xl  grow'>Adopt Now</Link>
               <ToggleTheme/>
             </div>
             {children}

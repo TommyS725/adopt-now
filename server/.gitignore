@@ -3,3 +3,5 @@ cookies/*
 
 # enviornment variables
 .env
+
+.DS_Store

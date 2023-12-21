@@ -39,7 +39,6 @@ export default async function Home() {
         <div className=" py-4 w-full">
           <HeaderSlide/>
         </div>
-        <h1 className='py-4'>Save lifessssss!</h1>
         <MainSection providers={providers}/>
       <ScrollTop/>
       </main>

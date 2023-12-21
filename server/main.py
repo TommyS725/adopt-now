@@ -16,6 +16,8 @@ load_dotenv(env_file)
 now = datetime.datetime.now()   
 
 cookies = os.listdir("./cookies")
+cookies = [file for file in cookies if file !=".DS_Store"]
+print(cookies)
 
 config = ConfigParser()
 config.read('config.ini')
@@ -68,7 +70,7 @@ def lastUpdate():
 
 @app.get("/posts")
 def getAllPost():
-    conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"))
+    conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"),password= os.getenv("DB_PW"))
     cur = conn.cursor()
     cur.execute("""select * from post; """)
     data = cur.fetchall()
@@ -79,7 +81,7 @@ def getAllPost():
 
 @app.get("/providers")
 def getAllProvider():
-    conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"))
+    conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"),password= os.getenv("DB_PW"))
     cur = conn.cursor()
     cur.execute("""select * from provider; """)
     data = cur.fetchall()
@@ -115,7 +117,7 @@ def update():
     timezone = time.timezone
     
     try:
-        conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"))
+        conn = psycopg2.connect(host=os.getenv("DB_HOST"),dbname=os.getenv("DB_NAME"),user=os.getenv("DB_USER"),port=os.getenv("DB_PORT"),password= os.getenv("DB_PW"))
         cur = conn.cursor()
         # find all provider
         cur.execute("""--sql 
